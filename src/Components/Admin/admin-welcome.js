@@ -11,6 +11,7 @@ import AdminRoutes from "../../Routes/adminRoutes";
 import LoginNav from "../LoginNav";
 import LoginCard from "../LoginCard";
 import PureLoginCard from "../PureLoginCard";
+import jwt from "jwt-decode";
 class AdminWelcome extends React.Component {
 	constructor(props) {
 		super(props);
@@ -30,17 +31,18 @@ class AdminWelcome extends React.Component {
 		await this.setState({ email: childEmail });
 		await this.setState({ password: childPswrd });
 		axios
-			.post("http://localhost:801/HMS/server/login-admin.php", this.state)
+			.post("http://localhost:12347/adminLogin", this.state)
 			.then((res) => {
 				console.log(res);
-				if (res.data.user_data) {
-					console.log(res.data.user_data.user_id);
-					sessionStorage.setItem("userData", res.data.user_data);
-					sessionStorage.setItem("username", res.data.user_data.name);
-					sessionStorage.setItem(
-						"user_id",
-						res.data.user_data.user_id
-					);
+				if (res.data) {
+					console.log(res.data.token);
+					var name = jwt(res.data.token).name;
+					var id = jwt(res.data.token).Id;
+					var auth = jwt(res.data.token).authorized;
+					sessionStorage.setItem("token", res.data.token);
+					sessionStorage.setItem("auth", auth);
+					sessionStorage.setItem("username", name);
+					sessionStorage.setItem("user_id", id);
 					this.setState({ redirectReq: true });
 				} else {
 					alert(res.data.error);
@@ -50,13 +52,15 @@ class AdminWelcome extends React.Component {
 	logout() {
 		sessionStorage.setItem("userData", "");
 		sessionStorage.setItem("username", "");
+		sessionStorage.setItem("auth", "");
+		sessionStorage.setItem("token", "");
 		sessionStorage.clear();
 		sessionStorage.clear();
 		this.setState({ redirectReq: false });
 		<Redirect to="/adminLogin" />;
 	}
 	render() {
-		if (this.state.redirectToReq || sessionStorage.getItem("userData")) {
+		if (this.state.redirectToReq || sessionStorage.getItem("auth")) {
 			return (
 				<div>
 					<NavBar fun={() => this.logout()} />

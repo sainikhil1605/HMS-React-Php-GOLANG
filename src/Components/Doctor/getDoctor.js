@@ -21,10 +21,14 @@ class GetDoctor extends React.Component {
 		this.handleDelete = this.handleDelete.bind(this);
 	}
 	componentDidMount() {
+		const headers = {
+			authorization: sessionStorage.getItem("token"),
+		};
 		axios
-			.get("http://localhost:801/HMS/server/get-doctor.php")
+			.get("http://localhost:12347/getDoctor", { headers: headers })
 			.then((resp) => {
-				this.setState({ doctors: resp.data["doctors"] });
+				console.log(resp);
+				this.setState({ doctors: resp.data });
 				// console.log(this.state.users);
 			});
 	}
@@ -32,8 +36,8 @@ class GetDoctor extends React.Component {
 		console.log(id);
 
 		axios
-			.post("http://localhost:801/HMS/server/delete-doctor.php", {
-				doctor_id: id,
+			.post("http://localhost:12347/deleteDoctor", {
+				Id: id,
 			})
 			.then((res) => {
 				alert("User deleted");
@@ -125,11 +129,9 @@ class GetDoctor extends React.Component {
 											if (this.state.searchTerm === "") {
 												return doctor;
 											} else if (
-												doctor.doc_name
-													.toLowerCase()
-													.includes(
-														this.state.searchTerm.toLowerCase()
-													)
+												doctor.Name.toLowerCase().includes(
+													this.state.searchTerm.toLowerCase()
+												)
 											) {
 												return doctor;
 											}
@@ -138,18 +140,16 @@ class GetDoctor extends React.Component {
 											return (
 												<tr>
 													<th scope="row">
-														{doctor.doctor_id}
+														{doctor.Id}
 													</th>
-													<td>{doctor.doc_name}</td>
-													<td>{doctor.department}</td>
+													<td>{doctor.Name}</td>
+													<td>{doctor.Department}</td>
 													{this.props.msg ? (
 														<h1></h1>
 													) : (
 														<td>
 															<Button
-																id={
-																	doctor.doctor_id
-																}
+																id={doctor.Id}
 																color="danger"
 																onClick={(e) =>
 																	this.handleDelete(

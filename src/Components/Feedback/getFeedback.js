@@ -9,13 +9,17 @@ class GetFeedBack extends React.Component {
 		};
 	}
 	componentDidMount() {
+		const headers = {
+			authorization: sessionStorage.getItem("token"),
+		};
 		axios
-			.get("http://localhost:801/HMS/server/get-feedback.php")
+			.get("http://localhost:12347/getFeedback", { headers: headers })
 			.then((res) => {
-				this.setState({ feedbacks: res.data["feedbacks"] });
+				this.setState({ feedbacks: res.data });
 			});
 	}
 	render() {
+		console.log(this.state);
 		return (
 			<div>
 				<Row>
@@ -38,9 +42,9 @@ class GetFeedBack extends React.Component {
 						{this.state.feedbacks.map((feedback) => {
 							return (
 								<tr>
-									<td>{feedback.name}</td>
-									<td>{feedback.email}</td>
-									<td>{feedback.suggestion}</td>
+									<td>{feedback.Name}</td>
+									<td>{feedback.Email}</td>
+									<td>{feedback.Suggestion}</td>
 								</tr>
 							);
 						})}

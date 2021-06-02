@@ -20,11 +20,18 @@ class GetPatient extends React.Component {
 		};
 		this.handleDelete = this.handleDelete.bind(this);
 	}
+
 	componentDidMount() {
-		axios.get("http://localhost:12347/getPatient").then((res) => {
-			this.setState({ patients: res.data });
-			console.log(res);
-		});
+		const headers = {
+			authorization: sessionStorage.getItem("token"),
+		};
+
+		axios
+			.get("http://localhost:12347/getPatient", { headers: headers })
+			.then((res) => {
+				this.setState({ patients: res.data });
+				console.log(res);
+			});
 		console.log(this.state);
 	}
 	handleDelete(id) {
