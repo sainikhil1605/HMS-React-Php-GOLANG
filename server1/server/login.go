@@ -13,6 +13,7 @@ import (
 type Auth struct{
 	Email string 
 	Password string
+	Role string
 }
 type User struct{
 	User_id string
@@ -29,13 +30,13 @@ type Error struct {
 	Message string `json:"message"`
 }
 
-func GenerateJWT(name, user_id string) (string, error) {
+func GenerateJWT(name, user_id,role string,auth bool) (string, error) {
 	var mySigningKey = []byte("secretkey")
 	token := jwt.New(jwt.SigningMethodHS256)
 	claims := token.Claims.(jwt.MapClaims)
-	claims["authorized"] = true
+	claims["auth"] = auth
 	claims["name"] = name
-	claims["role"]="admin"
+	claims["role"]=role
 	claims["Id"] = user_id
 	claims["exp"] = time.Now().Add(time.Minute * 30).Unix()
 	tokenString, err := token.SignedString(mySigningKey)
@@ -45,9 +46,10 @@ func GenerateJWT(name, user_id string) (string, error) {
 	}
 	return tokenString, nil
 }
-func AdminLoginEndPoint(w http.ResponseWriter, req *http.Request){
+func LoginEndPoint(w http.ResponseWriter, req *http.Request){
 	var p Auth
 	var temp User;
+	var auth bool;
     err := json.NewDecoder(req.Body).Decode(&p)
     if err != nil {
         http.Error(w, err.Error(), http.StatusBadRequest)
@@ -56,38 +58,36 @@ func AdminLoginEndPoint(w http.ResponseWriter, req *http.Request){
 	fmt.Println("Hi");
 	fmt.Println(p);
 	// fmt.Println("SELECT user_id,name FROM `admin` where email=\""+p.Email+"\" and password=\""+p.Password+"\"")
-	rows,er:=db.Query("SELECT `user_id`,`name` FROM `admin` where email=\""+p.Email+"\"and password=\""+p.Password+"\"");
+	rows,er:=db.Query("SELECT "+p.Role+"_id,"+p.Role+"_name FROM "+p.Role+" where email=\""+p.Email+"\" and password=\""+p.Password+"\"");
+	// fmt.Println("SELECT "+p.Role+"_id,"+p.Role+"_name FROM "+p.Role+" where email=\""+p.Email+"\" and password=\""+p.Password+"\"")
+
 	if(er!=nil){
 		fmt.Println(er);
-		
+		auth=false;
 	}else{
 		// fmt.Println("hi");
+		
 		for rows.Next(){
 		rows.Scan(&temp.User_id,&temp.Name);
 		}
-		fmt.Println(temp);
+		auth=true;
+		// fmt.Println(temp);
 		
 	}
-	validToken, err := GenerateJWT(temp.Name,temp.User_id)
+	validToken, err := GenerateJWT(temp.Name,temp.User_id,p.Role,auth);
   
 	if err != nil {
 	
 		return
 	}
 	var token Token
-	// token.Email = temp.Name;
+	token.Email = p.Email;
 	// token.Role = "admin"
 	token.TokenString = validToken
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(token)
 }
-func AdminIndex(w http.ResponseWriter, r *http.Request){
-	if r.Header.Get("Role") != "admin" {
-		w.Write([]byte("Not authorized."))
-		return ;
-	}
-	w.Write([]byte("Welcome, Admin."))
-}
+
 func SetError(err Error, message string) Error {
 	err.IsError = true
 	err.Message = message
@@ -130,6 +130,10 @@ func IsAuthorized(handler http.HandlerFunc) http.HandlerFunc {
 				handler.ServeHTTP(w, r)
 				return
 
+			}else if(claims["role"]=="patient"){
+				r.Header.Set("Role", "patient")
+				handler.ServeHTTP(w, r)
+				return
 			}
 		}
 		var reserr Error
@@ -145,10 +149,10 @@ func S1(){
 	createConnection();
 	// router.HandleFunc("/getPatient",GetPatientEndPoint).Methods("Get")
 	router.HandleFunc("/getPatient",IsAuthorized(GetPatientEndPoint)).Methods("GET","OPTIONS")
-	router.HandleFunc("/deletePatient",DeletePatientEndPoint).Methods("POST", "OPTIONS")
+	router.HandleFunc("/deletePatient",IsAuthorized(DeletePatientEndPoint)).Methods("POST", "OPTIONS")
 	router.HandleFunc("/getFeedback",IsAuthorized(GetFeedbackEndPoint)).Methods("GET")
 	router.HandleFunc("/getDoctor",IsAuthorized(GetDoctorEndPoint)).Methods("GET")
 	router.HandleFunc("/deleteDoctor",DeleteDoctorEndPoint).Methods("POST","OPTIONS");
-	router.HandleFunc("/adminLogin",AdminLoginEndPoint).Methods("POST","OPTIONS");
+	router.HandleFunc("/login",LoginEndPoint).Methods("POST","OPTIONS");
 	http.ListenAndServe(":12347", handlers.CORS(header, methods, origins)(router))
 }

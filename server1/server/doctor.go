@@ -13,7 +13,7 @@ type doctor struct{
 }
 var doc []doctor
 func GetDoctorEndPoint(w http.ResponseWriter, req *http.Request){
-	rows,er:=db.Query("SELECT doctor_id,doc_name,department FROM `doctor`");
+	rows,er:=db.Query("SELECT doctor_id,doctor_name,department FROM `doctor`");
 	doc:=[]doctor{};
 	if(er==nil){
 		fmt.Println("hi")
