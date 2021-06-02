@@ -7,8 +7,6 @@ import (
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/gorilla/handlers"
-	"github.com/gorilla/mux"
 )
 type Patient struct{
 	Id string "json:id"
@@ -35,6 +33,10 @@ func createConnection(){
 func GetPatientEndPoint(w http.ResponseWriter, req *http.Request){
 	(w).Header().Set("Access-Control-Allow-Origin", "*")
 	(w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	if req.Header.Get("Role") != "admin" {
+		w.Write([]byte("Not authorized."))
+		return ;
+	}else{
 	rows,er:=db.Query("select patient_id,patient_name,email,address,phone,sex from patient");
     fmt.Println(rows)
 	pat:=[]Patient{};
@@ -48,6 +50,7 @@ func GetPatientEndPoint(w http.ResponseWriter, req *http.Request){
          }
       }
 	  json.NewEncoder(w).Encode(pat)
+	}
 }
 
 
@@ -69,17 +72,4 @@ func DeletePatientEndPoint(w http.ResponseWriter, req *http.Request){
 	}
     fmt.Fprintf(w, "Person: %+v", p)
 
-}
-func S1(){
-	router:=mux.NewRouter();
-	header := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"})
-methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"})
-origins := handlers.AllowedOrigins([]string{"*"})
-	createConnection();
-	router.HandleFunc("/getPatient",GetPatientEndPoint).Methods("Get")
-	router.HandleFunc("/deletePatient",DeletePatientEndPoint).Methods("POST", "OPTIONS")
-	router.HandleFunc("/getFeedback",GetFeedbackEndPoint).Methods("GET")
-	router.HandleFunc("/getDoctor",GetDoctorEndPoint).Methods("GET")
-	router.HandleFunc("/deleteDoctor",DeleteDoctorEndPoint).Methods("POST","OPTIONS");
-	http.ListenAndServe(":12347", handlers.CORS(header, methods, origins)(router))
 }
