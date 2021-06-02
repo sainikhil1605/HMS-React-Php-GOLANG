@@ -18,6 +18,7 @@ class AdminWelcome extends React.Component {
 		this.state = {
 			email: "",
 			password: "",
+			role: "admin",
 			redirectReq: false,
 			admin_id: "",
 			error: "",
@@ -30,24 +31,22 @@ class AdminWelcome extends React.Component {
 	async handleSubmit(childEmail, childPswrd) {
 		await this.setState({ email: childEmail });
 		await this.setState({ password: childPswrd });
-		axios
-			.post("http://localhost:12347/adminLogin", this.state)
-			.then((res) => {
-				console.log(res);
-				if (res.data) {
-					console.log(res.data.token);
-					var name = jwt(res.data.token).name;
-					var id = jwt(res.data.token).Id;
-					var auth = jwt(res.data.token).authorized;
-					sessionStorage.setItem("token", res.data.token);
-					sessionStorage.setItem("auth", auth);
-					sessionStorage.setItem("username", name);
-					sessionStorage.setItem("user_id", id);
-					this.setState({ redirectReq: true });
-				} else {
-					alert(res.data.error);
-				}
-			});
+		axios.post("http://localhost:12347/login", this.state).then((res) => {
+			console.log(res);
+			if (res.data) {
+				console.log(res.data.token);
+				var name = jwt(res.data.token).name;
+				var id = jwt(res.data.token).Id;
+				var auth = jwt(res.data.token).authorized;
+				sessionStorage.setItem("token", res.data.token);
+				sessionStorage.setItem("auth", auth);
+				sessionStorage.setItem("username", name);
+				sessionStorage.setItem("user_id", id);
+				this.setState({ redirectReq: true });
+			} else {
+				alert(res.data.error);
+			}
+		});
 	}
 	logout() {
 		sessionStorage.setItem("userData", "");

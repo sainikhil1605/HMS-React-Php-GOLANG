@@ -13,7 +13,7 @@ class PatientAppointments extends Component {
 	async componentDidMount() {
 		await axios
 			.post("http://localhost:801/HMS/server/patientAppointments.php", {
-				email: sessionStorage.getItem("patient_email"),
+				email: sessionStorage.getItem("patientEmail"),
 			})
 			.then((res) => {
 				console.log(res.data);

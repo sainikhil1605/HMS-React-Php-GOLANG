@@ -82,7 +82,7 @@ footer {
 		align-items: center;
 	}
 	img {
-		width: 506px;
+		width: 100%;
 	}
 }
 @media (min-width: 1200px) {

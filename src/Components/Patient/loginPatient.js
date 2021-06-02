@@ -10,12 +10,14 @@ import SecNavBar from "./secNavBar";
 import LoginNav from "../LoginNav";
 import PatientRoutes from "../../Routes/patientRoutes";
 import LoginCard from "../LoginCard";
+import jwt from "jwt-decode";
 class PatientLogin extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			email: "",
 			password: "",
+			role: "patient",
 			patient_id: "",
 			error: "",
 		};
@@ -24,45 +26,39 @@ class PatientLogin extends React.Component {
 
 	async handleSubmit(childEmail, childPswrd) {
 		await this.setState({ email: childEmail, password: childPswrd });
-		axios
-			.post(
-				"http://localhost:801/HMS/server/login-patient.php",
-				this.state
-			)
-			.then((res) => {
-				if (res.data.patient_data) {
-					sessionStorage.setItem(
-						"patientData",
-						res.data.patient_data
-					);
-					sessionStorage.setItem(
-						"patientName",
-						res.data.patient_data.patient_name
-					);
-					sessionStorage.setItem(
-						"patientEmail",
-						res.data.patient_data.email
-					);
-					sessionStorage.setItem(
-						"patientContact",
-						res.data.patient_data.phone
-					);
-					sessionStorage.setItem(
-						"patient_id",
-						res.data.patient_data.patient_id
-					);
-					sessionStorage.setItem(
-						"patient_email",
-						res.data.patient_data.email
-					);
-					this.setState({ patientredirectReq: true });
-				} else {
-					alert(res.data.error);
-				}
-			});
+		axios.post("http://localhost:12347/login", this.state).then((res) => {
+			console.log(res);
+			if (res.data.token) {
+				sessionStorage.setItem("token", res.data.token);
+				sessionStorage.setItem("patientName", jwt(res.data.token).name);
+				sessionStorage.setItem("patient_id", jwt(res.data.token).Id);
+				sessionStorage.setItem("auth", jwt(res.data.token).auth);
+
+				// 	sessionStorage.setItem(
+				// 		"patientName",
+				// 		res.data.patient_data.patient_name
+				// 	);
+				sessionStorage.setItem("patientEmail", res.data.email);
+				// 	sessionStorage.setItem(
+				// 		"patientContact",
+				// 		res.data.patient_data.phone
+				// 	);
+				// 	sessionStorage.setItem(
+				// 		"patient_id",
+				// 		res.data.patient_data.patient_id
+				// 	);
+				// 	sessionStorage.setItem(
+				// 		"patient_email",
+				// 		res.data.patient_data.email
+				// 	);
+				// 	this.setState({ patientredirectReq: true });
+			} else {
+				alert(res.data.error);
+			}
+		});
 	}
 	render() {
-		if (sessionStorage.getItem("patientData")) {
+		if (sessionStorage.getItem("auth")) {
 			return (
 				<div>
 					<SecNavBar

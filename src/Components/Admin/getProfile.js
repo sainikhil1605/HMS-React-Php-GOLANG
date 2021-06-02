@@ -21,7 +21,7 @@ class GetProfile extends React.Component {
 				console.log(res.data);
 				this.setState({
 					id: this.props.id,
-					name: res.data.user_data[0].name,
+					name: res.data.user_data[0].admin_name,
 					email: res.data.user_data[0].email,
 					address: res.data.user_data[0].address,
 					phone: res.data.user_data[0].phone,

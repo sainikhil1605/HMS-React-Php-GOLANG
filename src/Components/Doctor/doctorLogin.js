@@ -10,12 +10,14 @@ import SecNavBar from "../Patient/secNavBar";
 import LoginNav from "../LoginNav";
 import DoctorRoutes from "../../Routes/doctorRoutes";
 import LoginCard from "../LoginCard";
+import jwt from "jwt-decode";
 class DoctorLogin extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			email: "",
 			password: "",
+			role: "doctor",
 			auth: false,
 			admin_id: "",
 			error: "",
@@ -24,32 +26,22 @@ class DoctorLogin extends React.Component {
 	}
 	async handleSubmit(childEmail, childPswrd) {
 		await this.setState({ email: childEmail, password: childPswrd });
-		axios
-			.post(
-				"http://localhost:801/HMS/server/login-doctor.php",
-				this.state
-			)
-			.then((res) => {
-				console.log(res);
-				if (res.data.doctor_data) {
-					sessionStorage.setItem("doctorData", res.data.doctor_data);
-					sessionStorage.setItem(
-						"docName",
-						res.data.doctor_data.doc_name
-					);
-					sessionStorage.setItem(
-						"doc_id",
-						res.data.doctor_data.doctor_id
-					);
-					this.setState({ docredirectReq: true });
-				} else {
-					alert(res.data.error);
-				}
-			});
+		axios.post("http://localhost:12347/login", this.state).then((res) => {
+			console.log(jwt(res.data.token));
+			if (res.data) {
+				sessionStorage.setItem("token", res.data.token);
+				sessionStorage.setItem("docName", jwt(res.data.token).name);
+				sessionStorage.setItem("doc_id", jwt(res.data.token).Id);
+				sessionStorage.setItem("auth", jwt(res.data.token).auth);
+				this.setState({ docredirectReq: true });
+			} else {
+				alert(res.data.error);
+			}
+		});
 	}
 
 	render() {
-		if (sessionStorage.getItem("doctorData")) {
+		if (sessionStorage.getItem("auth")) {
 			return (
 				<div>
 					<SecNavBar

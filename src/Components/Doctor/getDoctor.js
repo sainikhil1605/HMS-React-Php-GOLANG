@@ -27,6 +27,7 @@ class GetDoctor extends React.Component {
 		axios
 			.get("http://localhost:12347/getDoctor", { headers: headers })
 			.then((resp) => {
+				console.log("hi");
 				console.log(resp);
 				this.setState({ doctors: resp.data });
 				// console.log(this.state.users);
