@@ -12,3 +12,9 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 Change the username and password in dbconnection.php file
 Design the required Databases and run the server
+
+
+GO Lang Server:
+Run the GO Lang Server by running the following command in server1 folder
+
+### `go run main.go`
