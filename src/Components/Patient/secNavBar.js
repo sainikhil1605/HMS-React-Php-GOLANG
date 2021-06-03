@@ -1,6 +1,7 @@
 import React from "react";
 import { Navbar, Nav, NavItem, NavbarText, NavLink, Button } from "reactstrap";
 import { withRouter } from "react-router-dom";
+import Cookies from "js-cookie";
 class SecNavBar extends React.Component {
 	constructor(props) {
 		super(props);
@@ -10,10 +11,11 @@ class SecNavBar extends React.Component {
 		// this.logout=this.logout.bind(this);
 	}
 	logout() {
-		sessionStorage.setItem(this.props.data, "");
-		sessionStorage.setItem(this.props.name, "");
-		sessionStorage.clear();
-		sessionStorage.clear();
+		Cookies.remove(this.props.data);
+		Cookies.remove(this.props.name);
+		Cookies.remove("auth");
+		// sessionStorage.clear();
+		// sessionStorage.clear();
 		// <Redirect to="/patientLogin" />
 		// window.location.reload();
 		this.props.history.push(this.props.link);

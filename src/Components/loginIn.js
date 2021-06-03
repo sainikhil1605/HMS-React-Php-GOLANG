@@ -18,7 +18,7 @@ class LogIn extends React.Component {
 	}
 	render() {
 		return (
-			<Form style={{ marginTop: "200px" }}>
+			<>
 				<FormGroup>
 					<Row>
 						<Col sm="0" md="2"></Col>
@@ -67,7 +67,7 @@ class LogIn extends React.Component {
 						</Col>
 					</Row>
 				</FormGroup>
-			</Form>
+			</>
 		);
 	}
 }

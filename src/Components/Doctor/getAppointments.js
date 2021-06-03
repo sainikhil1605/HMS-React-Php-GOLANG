@@ -11,6 +11,7 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Cookies from "js-cookie";
 class GetAppointments extends React.Component {
 	constructor(props) {
 		super(props);
@@ -22,11 +23,11 @@ class GetAppointments extends React.Component {
 		this.handlePres = this.handlePres.bind(this);
 	}
 	componentDidMount() {
-		console.log(sessionStorage.getItem("doc_id"));
+		console.log(Cookies.get("doc_id"));
 
 		axios
 			.post("http://localhost:801/HMS/server/get-appointments.php", {
-				doc_id: sessionStorage.getItem("doc_id"),
+				doc_id: Cookies.get("doc_id"),
 			})
 			.then((res) => {
 				console.log(res);

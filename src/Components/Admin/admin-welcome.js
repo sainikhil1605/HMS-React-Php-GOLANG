@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col } from "reactstrap";
+
 import { Switch, Route, Redirect } from "react-router-dom";
 import background from "../../assets/background.svg";
 import Header from "../header";
@@ -9,7 +9,7 @@ import admin from "../../assets/admin.png";
 import LogIn from "../loginIn";
 import AdminRoutes from "../../Routes/adminRoutes";
 import LoginNav from "../LoginNav";
-import LoginCard from "../LoginCard";
+import Cookies from "js-cookie";
 import PureLoginCard from "../PureLoginCard";
 import jwt from "jwt-decode";
 class AdminWelcome extends React.Component {
@@ -33,37 +33,47 @@ class AdminWelcome extends React.Component {
 		await this.setState({ password: childPswrd });
 		axios.post("http://localhost:12347/login", this.state).then((res) => {
 			console.log(res);
-			if (res.data) {
+
+			if (res.data.token) {
 				console.log(res.data.token);
+				Cookies.set("token", res.data.token);
+
 				var name = jwt(res.data.token).name;
 				var id = jwt(res.data.token).Id;
 				var auth = jwt(res.data.token).authorized;
-				sessionStorage.setItem("token", res.data.token);
-				sessionStorage.setItem("auth", auth);
-				sessionStorage.setItem("username", name);
-				sessionStorage.setItem("user_id", id);
+				// sessionStorage.setItem("token", res.data.token);
+				// sessionStorage.setItem("auth", auth);
+				Cookies.set("auth", auth);
+				// sessionStorage.setItem("username", name);
+				Cookies.set("username", name);
+				// sessionStorage.setItem("user_id", id);
+				Cookies.set("user_id", id);
 				this.setState({ redirectReq: true });
 			} else {
-				alert(res.data.error);
+				alert(res.data.message);
 			}
 		});
 	}
 	logout() {
-		sessionStorage.setItem("userData", "");
-		sessionStorage.setItem("username", "");
-		sessionStorage.setItem("auth", "");
-		sessionStorage.setItem("token", "");
-		sessionStorage.clear();
-		sessionStorage.clear();
+		// sessionStorage.setItem("userData", "");
+		Cookies.remove("userData");
+		// sessionStorage.setItem("username", "");
+		Cookies.remove("username");
+		Cookies.remove("auth");
+		// sessionStorage.setItem("auth", "");
+		// sessionStorage.setItem("token", "");
+		Cookies.remove("token");
+		// sessionStorage.clear();
+		// sessionStorage.clear();
 		this.setState({ redirectReq: false });
 		<Redirect to="/adminLogin" />;
 	}
 	render() {
-		if (this.state.redirectToReq || sessionStorage.getItem("auth")) {
+		if (this.state.redirectToReq || Cookies.get("auth")) {
 			return (
 				<div>
 					<NavBar fun={() => this.logout()} />
-					<Header msg={sessionStorage.getItem("username")} />
+					<Header msg={Cookies.get("username")} />
 					<AdminRoutes />
 				</div>
 			);
@@ -82,8 +92,8 @@ class AdminWelcome extends React.Component {
 							>
 								{/* <LoginCard src={admin} msg="Admin" /> */}
 								<PureLoginCard src={admin} msg="Admin" />
-								<div style={{ flex: "1" }}></div>
-								<div style={{ flex: "2" }}>
+								{/* <div style={{ flex: "1" }}></div> */}
+								<div className="DocForm" style={{ flex: "2" }}>
 									<LogIn fun={this.handleSubmit} />
 								</div>
 								<div style={{ flex: "1" }}></div>

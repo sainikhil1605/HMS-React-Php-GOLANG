@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Nav, NavItem, NavLink, Table } from "reactstrap";
-
+import Cookies from "js-cookie";
 class PatientAppointments extends Component {
 	constructor(props) {
 		super(props);
@@ -13,7 +13,7 @@ class PatientAppointments extends Component {
 	async componentDidMount() {
 		await axios
 			.post("http://localhost:801/HMS/server/patientAppointments.php", {
-				email: sessionStorage.getItem("patientEmail"),
+				email: Cookies.get("patientEmail"),
 			})
 			.then((res) => {
 				console.log(res.data);

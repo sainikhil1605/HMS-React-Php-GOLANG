@@ -11,6 +11,7 @@ import LoginNav from "../LoginNav";
 import PatientRoutes from "../../Routes/patientRoutes";
 import LoginCard from "../LoginCard";
 import jwt from "jwt-decode";
+import Cookies from "js-cookie";
 class PatientLogin extends React.Component {
 	constructor(props) {
 		super(props);
@@ -29,16 +30,21 @@ class PatientLogin extends React.Component {
 		axios.post("http://localhost:12347/login", this.state).then((res) => {
 			console.log(res);
 			if (res.data.token) {
-				sessionStorage.setItem("token", res.data.token);
-				sessionStorage.setItem("patientName", jwt(res.data.token).name);
-				sessionStorage.setItem("patient_id", jwt(res.data.token).Id);
-				sessionStorage.setItem("auth", jwt(res.data.token).auth);
+				// sessionStorage.setItem("token", res.data.token);
+				Cookies.set("token", res.data.token);
+				// sessionStorage.setItem("patientName", jwt(res.data.token).name);
+				Cookies.set("patientName", jwt(res.data.token).name);
+				// sessionStorage.setItem("patient_id", jwt(res.data.token).Id);
+				Cookies.set("patient_id", jwt(res.data.token).Id);
+				// sessionStorage.setItem("auth", jwt(res.data.token).auth);
+				Cookies.set("auth", jwt(res.data.token).auth);
 
 				// 	sessionStorage.setItem(
 				// 		"patientName",
 				// 		res.data.patient_data.patient_name
 				// 	);
-				sessionStorage.setItem("patientEmail", res.data.email);
+				// sessionStorage.setItem("patientEmail", res.data.email)
+				Cookies.set("patientEmail", res.data.email);
 				// 	sessionStorage.setItem(
 				// 		"patientContact",
 				// 		res.data.patient_data.phone
@@ -53,12 +59,13 @@ class PatientLogin extends React.Component {
 				// 	);
 				// 	this.setState({ patientredirectReq: true });
 			} else {
-				alert(res.data.error);
+				console.log(res);
+				alert(res.data.message);
 			}
 		});
 	}
 	render() {
-		if (sessionStorage.getItem("auth")) {
+		if (Cookies.get("auth")) {
 			return (
 				<div>
 					<SecNavBar
@@ -66,7 +73,7 @@ class PatientLogin extends React.Component {
 						name="patientName"
 						link="/patientLogin"
 					/>
-					<Header msg={sessionStorage.getItem("patientName")} />
+					<Header msg={Cookies.get("patientName")} />
 					<PatientRoutes />
 				</div>
 			);
@@ -80,12 +87,7 @@ class PatientLogin extends React.Component {
 							<Row mt="7">
 								<LoginCard src={patient} msg="Patient" />
 								<Col md="6">
-									<Form
-										style={{
-											marginTop: "200px",
-											marginLeft: "200px",
-										}}
-									>
+									<Form className="DocForm">
 										<LogIn fun={this.handleSubmit} />
 									</Form>
 								</Col>

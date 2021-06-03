@@ -1,8 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
+
 import {
 	Button,
-	NavLink,
 	Collapse,
 	Nav,
 	Navbar,
@@ -10,6 +9,7 @@ import {
 	NavbarToggler,
 	NavItem,
 } from "reactstrap";
+import { NavLink } from "react-router-dom";
 class NavBar extends React.Component {
 	constructor(props) {
 		super(props);
@@ -21,51 +21,6 @@ class NavBar extends React.Component {
 		this.setState({ active: e.target.innerHTML });
 	}
 	render() {
-		let deptStyle = {
-				color: "#61dafb",
-				borderBottom: "#61dafb",
-				borderRadius: "10px",
-			},
-			docStyle = { color: "white" },
-			patientStyle = { color: "white" },
-			feedStyle = { color: "white" },
-			profileStyle = { color: "white" };
-		if (this.state.active === "Departments") {
-			deptStyle = {
-				color: "#61dafb",
-				borderBottom: "#61dafb",
-				borderRadius: "10px",
-			};
-			docStyle = { color: "white" };
-			patientStyle = { color: "white" };
-			feedStyle = { color: "white" };
-			profileStyle = { color: "white" };
-		} else if (this.state.active === "Doctors") {
-			deptStyle = { color: "white" };
-			docStyle = { color: "#61dafb", borderBottom: "#61dafb" };
-			patientStyle = { color: "white" };
-			feedStyle = { color: "white" };
-			profileStyle = { color: "white" };
-		} else if (this.state.active === "Patients") {
-			deptStyle = { color: "white" };
-			docStyle = { color: "white" };
-			patientStyle = { color: "#61dafb", borderBottom: "#61dafb" };
-			feedStyle = { color: "white" };
-			profileStyle = { color: "white" };
-		} else if (this.state.active === "View Feedback") {
-			deptStyle = { color: "white" };
-			docStyle = { color: "white" };
-			patientStyle = { color: "white" };
-			feedStyle = { color: "#61dafb", borderBottom: "#61dafb" };
-			profileStyle = { color: "white" };
-		} else if (this.state.active === "Profile") {
-			deptStyle = { color: "white" };
-			docStyle = { color: "white" };
-			patientStyle = { color: "white" };
-			feedStyle = { color: "white" };
-			profileStyle = { color: "#61dafb", borderBottom: "#61dafb" };
-		}
-
 		return (
 			<div>
 				<Navbar style={{ backgroundColor: "#242526" }} dark expand="md">
@@ -78,59 +33,46 @@ class NavBar extends React.Component {
 					/>
 					<Collapse isOpen={this.state.isOpen} navbar>
 						<Nav className="mr-auto" navbar>
-							<NavItem>
-								<NavLink>
-									<Link
-										style={deptStyle}
-										to="/adminLogin"
-										onClick={(e) => this.handleClick(e)}
-									>
-										Departments
-									</Link>
+							<div className="mynav">
+								<NavLink
+									active
+									activeStyle={{ color: "#61dafb" }}
+									exact
+									to="/adminLogin"
+								>
+									Departments
+								</NavLink>
+							</div>
+							<NavItem className="mynav">
+								<NavLink
+									activeStyle={{ color: "#61dafb" }}
+									to="/adminLogin/addDoctor"
+								>
+									Doctors
 								</NavLink>
 							</NavItem>
-							<NavItem>
-								<NavLink>
-									<Link
-										style={docStyle}
-										to="/adminLogin/addDoctor"
-										onClick={(e) => this.handleClick(e)}
-									>
-										Doctors
-									</Link>
+							<NavItem className="mynav">
+								<NavLink
+									activeStyle={{ color: "#61dafb" }}
+									to="/adminLogin/addPatient"
+								>
+									Patients
 								</NavLink>
 							</NavItem>
-							<NavItem>
-								<NavLink>
-									<Link
-										style={patientStyle}
-										to="/adminLogin/addPatient"
-										onClick={(e) => this.handleClick(e)}
-									>
-										Patients
-									</Link>
+							<NavItem className="mynav">
+								<NavLink
+									activeStyle={{ color: "#61dafb" }}
+									to="/adminLogin/getFeedback"
+								>
+									View Feedback
 								</NavLink>
 							</NavItem>
-							<NavItem>
-								<NavLink>
-									<Link
-										style={feedStyle}
-										to="/adminLogin/getFeedback"
-										onClick={(e) => this.handleClick(e)}
-									>
-										View Feedback
-									</Link>
-								</NavLink>
-							</NavItem>
-							<NavItem>
-								<NavLink>
-									<Link
-										style={profileStyle}
-										to="/adminLogin/getProfile"
-										onClick={(e) => this.handleClick(e)}
-									>
-										Profile
-									</Link>
+							<NavItem className="mynav">
+								<NavLink
+									activeStyle={{ color: "#61dafb" }}
+									to="/adminLogin/getProfile"
+								>
+									Profile
 								</NavLink>
 							</NavItem>
 						</Nav>

@@ -10,6 +10,7 @@ import {
 	Col,
 	Input,
 } from "reactstrap";
+import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
 class GetDoctor extends React.Component {
 	constructor(props) {
@@ -22,7 +23,7 @@ class GetDoctor extends React.Component {
 	}
 	componentDidMount() {
 		const headers = {
-			authorization: sessionStorage.getItem("token"),
+			authorization: Cookies.get("token"),
 		};
 		axios
 			.get("http://localhost:12347/getDoctor", { headers: headers })

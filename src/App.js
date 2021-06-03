@@ -13,25 +13,8 @@ import PureFooter from "./Components/PureFooter";
 function App() {
 	return (
 		<div className="App">
-			{/* <a href="https://w3schools.com">hi</a> */}
 			<Switch>
 				<Route exact path="/">
-					{/* <Navbar color="dark" dark expand="md">
-						<Nav className="mr-auto" navbar>
-							<NavItem
-								style={{
-									color: "white",
-									padding: "20px",
-									fontSize: "20px",
-								}}
-							>
-								Global Hospitals
-							</NavItem>
-						</Nav>
-						<NavbarText>
-							<Link to="/signUp">New User? Sign Up!!</Link>
-						</NavbarText>
-					</Navbar> */}
 					<ul
 						style={{
 							display: "flex",
@@ -66,14 +49,8 @@ function App() {
 						</li>
 					</ul>
 					<div className="container">
-						{/* <Body role="Admin" src={admin} link="/adminLogin" /> */}
 						<PureBody role="Admin" src={admin} link="/adminLogin" />
-						{/* <Body role="Doctor" src={doctor} link="/doctorLogin" />
-						<Body
-							role="Patient"
-							src={patient}
-							link="patientLogin"
-						/> */}
+
 						<PureBody
 							role="Doctor"
 							src={doctor}
@@ -88,7 +65,6 @@ function App() {
 				</Route>
 				<EntryRoutes />
 			</Switch>
-			{/* <Footer /> */}
 			<PureFooter />
 		</div>
 	);

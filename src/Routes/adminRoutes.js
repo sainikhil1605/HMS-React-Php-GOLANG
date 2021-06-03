@@ -7,7 +7,7 @@ import GetDoctor from "../Components/Doctor/getDoctor";
 import GetFeedBack from "../Components/Feedback/getFeedback";
 import AddPatientForm from "../Components/Patient/addPatient";
 import GetPatient from "../Components/Patient/getPatient";
-
+import Cookies from "js-cookie";
 export default function AdminRoutes() {
 	return (
 		<Switch>
@@ -33,7 +33,7 @@ export default function AdminRoutes() {
 				<GetFeedBack />
 			</Route>
 			<Route exact path="/adminLogin/getProfile">
-				<GetProfile id={sessionStorage.getItem("user_id")} />
+				<GetProfile id={Cookies.get("user_id")} />
 			</Route>
 			<Route>
 				<h1>Error 404!! Page Not Found</h1>

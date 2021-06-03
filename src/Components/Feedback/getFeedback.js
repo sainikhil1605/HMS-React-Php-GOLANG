@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { Col, Row, Table } from "reactstrap";
+import Cookies from "js-cookie";
 class GetFeedBack extends React.Component {
 	constructor(props) {
 		super(props);
@@ -10,7 +11,7 @@ class GetFeedBack extends React.Component {
 	}
 	componentDidMount() {
 		const headers = {
-			authorization: sessionStorage.getItem("token"),
+			authorization: Cookies.get("token"),
 		};
 		axios
 			.get("http://localhost:12347/getFeedback", { headers: headers })

@@ -3,7 +3,7 @@ import GetDoctor from "../Components/Doctor/getDoctor";
 import BookAppointment from "../Components/Patient/bookAppointment";
 import GetPatientProfile from "../Components/Patient/getPatientProfile";
 import PatientAppointments from "../Components/Patient/patientAppointments";
-
+import Cookies from "js-cookie";
 export default function PatientRoutes() {
 	return (
 		<Switch>
@@ -14,9 +14,7 @@ export default function PatientRoutes() {
 				<BookAppointment />
 			</Route>
 			<Route exact path="/patientLogin/getPatientProfile">
-				<GetPatientProfile
-					patient_id={sessionStorage.getItem("patient_id")}
-				/>
+				<GetPatientProfile patient_id={Cookies.get("patient_id")} />
 			</Route>
 			<Route exact path="/patientLogin/patientAppointments">
 				<PatientAppointments />
