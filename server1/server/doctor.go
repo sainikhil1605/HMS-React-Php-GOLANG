@@ -6,10 +6,9 @@ import (
 	"net/http"
 )
 type doctor struct{
-	Id string `json:id`
-	Name string `json:name`
-	
-	Department string `json:contact`
+	Id string 
+	Name string 
+	Department string 
 }
 var doc []doctor
 func GetDoctorEndPoint(w http.ResponseWriter, req *http.Request){

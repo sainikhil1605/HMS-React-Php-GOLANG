@@ -18,11 +18,6 @@ type Patient struct{
 }
 var db *sql.DB
 var pat []Patient
-func enableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-	(*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-   
-}
 func createConnection(){
 	DB,err:=sql.Open("mysql", "root:password1234@tcp(172.17.0.2)/hospital");
 	if(err!=nil){
