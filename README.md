@@ -22,4 +22,4 @@ Run the GO Lang Server by running the following command in server1 folder
 
 <img src="./welcome.png" alt="Welcome Page" />
 <img src="./adminLogin.png" alt="Admin Login"/>
-<img src="./doctorLogin.png" alt="Doctor Login" />
+<img src="./Dashboard.png" alt="Doctor Login" />
