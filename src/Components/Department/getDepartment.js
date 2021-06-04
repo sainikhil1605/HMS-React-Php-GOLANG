@@ -11,6 +11,7 @@ import {
 	Table,
 } from "reactstrap";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 class GetDepartment extends React.Component {
 	constructor(props) {
 		super(props);
@@ -20,11 +21,15 @@ class GetDepartment extends React.Component {
 		};
 	}
 	componentDidMount() {
+		const headers = {
+			authorization: Cookies.get("token"),
+		};
 		axios
-			.get("http://localhost:801/HMS/server/get-department.php")
+			.get("http://localhost:12347/getDepartment", { headers: headers })
 			.then((resp) => {
-				this.setState({ depts: resp.data["depts"] });
-				// console.log(this.state.users);
+				console.log(resp);
+				this.setState({ depts: resp.data });
+				// // console.log(this.state.users);
 			});
 	}
 	handleDelete(id) {
@@ -94,7 +99,7 @@ class GetDepartment extends React.Component {
 										if (this.state.searchTerm === "") {
 											return dept;
 										} else if (
-											dept.dept_name
+											dept.deptName
 												.toLowerCase()
 												.includes(
 													this.state.searchTerm.toLowerCase()
@@ -108,14 +113,14 @@ class GetDepartment extends React.Component {
 										return (
 											<tr>
 												<th scope="row" id={index}>
-													{dept.dept_id}
+													{dept.DeptId}
 												</th>
-												<td>{dept.dept_name}</td>
-												<td>{dept.dept_description}</td>
+												<td>{dept.DeptName}</td>
+												<td>{dept.DeptDescription}</td>
 												<td>
 													<Button
 														color="danger"
-														id={dept.dept_id}
+														id={dept.DeptId}
 														onClick={(e) =>
 															this.handleDelete(
 																e.target.id

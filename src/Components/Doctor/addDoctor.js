@@ -13,26 +13,35 @@ import {
 import { Link } from "react-router-dom";
 import React from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 class AddDoctorForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			name: "",
-			email: "",
-			password: "",
-			address: "",
-			phone: "",
-			department: "",
+			Name: "",
+			Email: "",
+			Password: "",
+			Address: "",
+			Phone: "",
+			Department: "",
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 	handleSubmit(e) {
+		const headers = {
+			authorization: Cookies.get("token"),
+		};
 		console.log(this.state);
 		axios
-			.post("http://localhost:801/HMS/server/add-doctor.php", this.state)
+			.post("http://localhost:12347/addDoctor", this.state, {
+				headers: headers,
+			})
 			.then((res) => {
-				console.log(res);
-				alert(res.data);
+				if (res.data.isError) {
+					alert(res.data.message);
+				} else {
+					alert(res.data);
+				}
 			});
 	}
 	render() {
@@ -61,7 +70,7 @@ class AddDoctorForm extends React.Component {
 									type="text"
 									name="docname"
 									onChange={(e) =>
-										this.setState({ name: e.target.value })
+										this.setState({ Name: e.target.value })
 									}
 								/>
 							</Col>
@@ -77,7 +86,7 @@ class AddDoctorForm extends React.Component {
 									type="email"
 									name="docname"
 									onChange={(e) =>
-										this.setState({ email: e.target.value })
+										this.setState({ Email: e.target.value })
 									}
 								/>
 							</Col>
@@ -94,7 +103,7 @@ class AddDoctorForm extends React.Component {
 									name="docname"
 									onChange={(e) =>
 										this.setState({
-											password: e.target.value,
+											Password: e.target.value,
 										})
 									}
 								/>
@@ -117,7 +126,7 @@ class AddDoctorForm extends React.Component {
 									name="docname"
 									onChange={(e) =>
 										this.setState({
-											address: e.target.value,
+											Address: e.target.value,
 										})
 									}
 								/>
@@ -134,7 +143,7 @@ class AddDoctorForm extends React.Component {
 									type="phone"
 									name="docname"
 									onChange={(e) =>
-										this.setState({ phone: e.target.value })
+										this.setState({ Phone: e.target.value })
 									}
 								/>
 							</Col>
@@ -151,7 +160,7 @@ class AddDoctorForm extends React.Component {
 									name="docname"
 									onChange={(e) =>
 										this.setState({
-											department: e.target.value,
+											Department: e.target.value,
 										})
 									}
 								/>

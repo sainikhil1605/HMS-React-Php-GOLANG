@@ -1,30 +1,39 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import React from "react";
 import { Button, Col, Form, FormGroup, Input, Label, Row } from "reactstrap";
 class SignUp extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			name: "",
-			email: "",
-			password: "",
-			address: "",
-			phone: "",
-			sex: "",
-			birthdate: "",
-			age: "",
-			blood_group: "",
+			Name: "",
+			Email: "",
+			Password: "",
+			Address: "",
+			Phone: "",
+			Sex: "",
+			BirthDate: "",
+			Age: "",
+			BloodGroup: "",
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 	handleSubmit(e) {
 		console.log(this.state);
-
+		const headers = {
+			authorization: Cookies.get("token"),
+		};
 		axios
-			.post("http://localhost:801/HMS/server/add-patient.php", this.state)
+			.post("http://localhost:12347/addPatient", this.state, {
+				headers: headers,
+			})
 			.then((res) => {
 				console.log(res);
-				alert(res.data);
+				if (res.data.isError) {
+					alert(res.data.message);
+				} else {
+					alert(res.data);
+				}
 			});
 	}
 	render() {
@@ -40,7 +49,7 @@ class SignUp extends React.Component {
 								<Input
 									type="text"
 									onChange={(e) =>
-										this.setState({ name: e.target.value })
+										this.setState({ Name: e.target.value })
 									}
 								/>
 							</Col>
@@ -55,7 +64,7 @@ class SignUp extends React.Component {
 								<Input
 									type="email"
 									onChange={(e) =>
-										this.setState({ email: e.target.value })
+										this.setState({ Email: e.target.value })
 									}
 								/>
 							</Col>
@@ -71,13 +80,14 @@ class SignUp extends React.Component {
 									type="password"
 									onChange={(e) =>
 										this.setState({
-											password: e.target.value,
+											Password: e.target.value,
 										})
 									}
 								/>
 								<small>
 									(Must be atleast of length 8 with one
-									Uppercase,a number and a special character)
+									Uppercase,one Lowercase,a number and a
+									special character)
 								</small>
 							</Col>
 						</Row>
@@ -92,7 +102,7 @@ class SignUp extends React.Component {
 									type="text"
 									onChange={(e) =>
 										this.setState({
-											address: e.target.values,
+											Address: e.target.values,
 										})
 									}
 								/>
@@ -108,7 +118,7 @@ class SignUp extends React.Component {
 								<Input
 									type="phone"
 									onChange={(e) =>
-										this.setState({ phone: e.target.value })
+										this.setState({ Phone: e.target.value })
 									}
 								/>
 							</Col>
@@ -123,7 +133,7 @@ class SignUp extends React.Component {
 								<Input
 									type="text"
 									onChange={(e) =>
-										this.setState({ sex: e.target.value })
+										this.setState({ Sex: e.target.value })
 									}
 								/>
 							</Col>
@@ -139,7 +149,7 @@ class SignUp extends React.Component {
 									type="text"
 									onChange={(e) =>
 										this.setState({
-											birthdate: e.target.value,
+											BirthDate: e.target.value,
 										})
 									}
 								/>
@@ -149,13 +159,13 @@ class SignUp extends React.Component {
 					<FormGroup>
 						<Row>
 							<Col sm="2">
-								<Label>Age</Label>
+								<Label>Age *</Label>
 							</Col>
 							<Col sm="10">
 								<Input
 									type="number"
 									onChange={(e) =>
-										this.setState({ age: e.target.value })
+										this.setState({ Age: e.target.value })
 									}
 								/>
 							</Col>
@@ -171,7 +181,7 @@ class SignUp extends React.Component {
 									type="text"
 									onChange={(e) =>
 										this.setState({
-											blood_group: e.target.value,
+											BloodGroup: e.target.value,
 										})
 									}
 								/>
