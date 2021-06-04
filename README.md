@@ -21,7 +21,7 @@ server1 folder contains the Go Lang server 🙂
 
 GO Lang Server:
 Run the GO Lang Server by running the following command in server1 folder
-
+###  `cd server1`
 ### `go run main.go`
 
 <img src="./welcome.png" alt="Welcome Page" />
