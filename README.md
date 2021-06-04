@@ -5,6 +5,7 @@ To run the required packages
 
 In the project directory, you can run:
 
+### `cd client`
 ### `npm start`
 
 Runs the app in the development mode.\
@@ -14,6 +15,8 @@ Change the username and password in dbconnection.php file.\
 Design the required Databases.\
 run the server
 
+server folder contains the PHP server.\
+server1 folder contains the Go Lang server 🙂
 
 GO Lang Server:
 Run the GO Lang Server by running the following command in server1 folder
