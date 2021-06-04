@@ -7,10 +7,15 @@ import (
 )
 type doctor struct{
 	Id string 
-	Name string 
+	Name string
+	Email string
+	Password string
+	Address string
+	Phone string  
 	Department string 
 }
 var doc []doctor
+
 func GetDoctorEndPoint(w http.ResponseWriter, req *http.Request){
 	rows,er:=db.Query("SELECT doctor_id,doctor_name,department FROM `doctor`");
 	doc:=[]doctor{};
@@ -43,4 +48,44 @@ func DeleteDoctorEndPoint(w http.ResponseWriter, req *http.Request){
 	}
     fmt.Fprintf(w, "Person: %+v", p)
 
+}
+func AddDoctorEndPoint(w http.ResponseWriter, req *http.Request){
+	var k doctor
+
+	err:=json.NewDecoder(req.Body).Decode(&k);
+	if(err!=nil){
+		http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+	}
+	fmt.Println("this is k");
+	fmt.Println(k);
+	if(k.Name!=""&&k.Email!=""&&k.Password!=""){
+		if(isValid(k.Password)){
+	rows,err:=db.Query("INSERT INTO `doctor`(`doctor_name`, `email`, `password`, `address`, `phone`, `department`) VALUES('"+k.Name+"','"+k.Email+"','"+k.Password+"','"+k.Address+"','"+k.Phone+"','"+k.Department+"')");
+	if(err!=nil){
+		_=rows
+		fmt.Println(err);
+		var reserr Error
+		reserr = SetError(reserr, "Doctor Not Added");
+		json.NewEncoder(w).Encode(reserr);
+		return 
+	}
+	if(err==nil){
+		fmt.Fprintf(w,"Success");
+	}else{
+		_=rows
+		fmt.Fprintf(w,"Failed");
+	}
+}else{
+	var reserr Error
+		reserr = SetError(reserr, "Password Doesnot Follow The Constraints");
+		json.NewEncoder(w).Encode(reserr);
+		return 
+}
+	}else{
+		var reserr Error
+		reserr = SetError(reserr, "Mandatory Field Cannot be empty");
+		json.NewEncoder(w).Encode(reserr);
+		return 
+	}
 }

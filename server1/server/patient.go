@@ -12,9 +12,13 @@ type Patient struct{
 	Id string "json:id"
 	Name string "json:name omitempty"
 	Email string "json:email omitempty"
+	Password string
 	Address string "json:address omitempty"
 	Phone string "json:phone omitempty"
 	Sex string "json:sex omitempty"
+	BirthDate string
+	Age string
+	BloodGroup string
 }
 var db *sql.DB
 var pat []Patient
@@ -67,4 +71,44 @@ func DeletePatientEndPoint(w http.ResponseWriter, req *http.Request){
 	}
     fmt.Fprintf(w, "Person: %+v", p)
 
+}
+func AddPatientEndPoint(w http.ResponseWriter, req *http.Request){
+	var k Patient
+
+	err:=json.NewDecoder(req.Body).Decode(&k);
+	if(err!=nil){
+		http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+	}
+	fmt.Println("this is k");
+	fmt.Println(k);
+	if(k.Name!=""&&k.Email!=""&&k.Password!=""){
+		if(isValid(k.Password)){
+			rows,err:=db.Query("INSERT INTO `patient`(`patient_name`,`email`,`password`,`address`,`phone`,`sex`,`birthdate`,`age`,`blood_group`) VALUES('"+k.Name+"','"+k.Email+"','"+k.Password+"','"+k.Address+"','"+k.Phone+"','"+k.Sex+"','"+k.BirthDate+"','"+k.Age+"','"+k.BloodGroup+"')");
+			if(err!=nil){
+				_=rows
+				fmt.Println(err);
+				var reserr Error
+				reserr = SetError(reserr, "Doctor Not Added");
+				json.NewEncoder(w).Encode(reserr);
+				return 
+			}
+			if(err==nil){
+					fmt.Fprintf(w,"Success");
+			}else{
+				_=rows
+				fmt.Fprintf(w,"Failed");
+			}
+		}else{
+			var reserr Error
+			reserr = SetError(reserr, "Password Doesnot Follow The Constraints");
+			json.NewEncoder(w).Encode(reserr);
+			return 
+		}
+	}else{
+		var reserr Error
+		reserr = SetError(reserr, "Mandatory Field Cannot be empty");
+		json.NewEncoder(w).Encode(reserr);
+		return 
+	}
 }
