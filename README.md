@@ -1,10 +1,11 @@
 Clone the Repository and run
 ### `npm install` 
 To run the required packages
-## Available Scripts
+
 
 In the project directory, you can run:
 
+## Running Front End
 ### `cd client`
 ### `npm start`
 
@@ -15,6 +16,7 @@ Change the username and password in dbconnection.php file.\
 Design the required Databases.\
 run the server
 
+## Running Back End
 server folder contains the PHP server.\
 server1 folder contains the Go Lang server 🙂
 
