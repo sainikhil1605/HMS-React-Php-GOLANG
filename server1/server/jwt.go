@@ -31,7 +31,6 @@ func SetError(err Error, message string) Error {
 }
 func IsAuthorized(handler http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// fmt.Println(r.Header);
 		if r.Header["Authorization"] == nil {
 			var err Error
 			err = SetError(err, "No Token Found")
@@ -61,7 +60,7 @@ func IsAuthorized(handler http.HandlerFunc) http.HandlerFunc {
 				handler.ServeHTTP(w, r)
 				return
 
-			} else if claims["role"] == "user" {
+			} else if claims["role"] == "doctor" {
 				r.Header.Set("Role", "user")
 				handler.ServeHTTP(w, r)
 				return

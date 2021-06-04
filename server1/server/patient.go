@@ -9,13 +9,13 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 type Patient struct{
-	Id string "json:id"
-	Name string "json:name omitempty"
-	Email string "json:email omitempty"
+	Id string 
+	Name string 
+	Email string 
 	Password string
-	Address string "json:address omitempty"
-	Phone string "json:phone omitempty"
-	Sex string "json:sex omitempty"
+	Address string 
+	Phone string 
+	Sex string
 	BirthDate string
 	Age string
 	BloodGroup string

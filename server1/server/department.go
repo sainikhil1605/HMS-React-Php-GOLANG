@@ -31,8 +31,6 @@ func DelteDepartmentEndPoint(w http.ResponseWriter, req *http.Request){
         http.Error(w, err.Error(), http.StatusBadRequest)
         return
     }
-	fmt.Println("Hi");
-	fmt.Println(p);
 	rows,er:=db.Query("DELETE FROM `department` where dept_id="+p.DeptId);
 	if(er==nil){
 		fmt.Fprintf(w,"Success");
@@ -44,14 +42,11 @@ func DelteDepartmentEndPoint(w http.ResponseWriter, req *http.Request){
 }
 func AddDepartmentEndPoint(w http.ResponseWriter, req *http.Request){
 	var k Department
-
 	err:=json.NewDecoder(req.Body).Decode(&k);
 	if(err!=nil){
 		http.Error(w, err.Error(), http.StatusBadRequest)
         return
 	}
-	fmt.Println("this is k");
-	fmt.Println(k);
 	if(k.DeptName!=""){
 	rows,err:=db.Query("INSERT INTO department (dept_name,dept_description) VALUES('"+k.DeptName+"','"+k.DeptDescription+"'"+")");
 	if(err!=nil){

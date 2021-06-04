@@ -35,7 +35,6 @@ func LoginEndPoint(w http.ResponseWriter, req *http.Request){
         return
     }
 
-	fmt.Println(p);
 	rows,er:=db.Query("SELECT "+p.Role+"_id,"+p.Role+"_name FROM "+p.Role+" where email=\""+p.Email+"\" and password=\""+p.Password+"\"");
 
 	if(er!=nil){
