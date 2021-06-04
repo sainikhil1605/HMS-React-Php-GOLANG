@@ -1,6 +1,6 @@
 Clone the Repository using 
 
-### `git clone https://github.com/sainikhil1605/Hospital-Management-System-React-Php-GOLANG `
+### `git clone`
 
 ## Running Front End
 
