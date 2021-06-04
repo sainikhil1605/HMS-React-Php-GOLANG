@@ -1,12 +1,11 @@
-Clone the Repository and run
-### `npm install` 
-To run the required packages
+Clone the Repository using 
 
-
-In the project directory, you can run:
+### `git clone https://github.com/sainikhil1605/Hospital-Management-System-React-Php-GOLANG `
 
 ## Running Front End
+
 ### `cd client`
+### `npm install` 
 ### `npm start`
 
 Runs the app in the development mode.\
