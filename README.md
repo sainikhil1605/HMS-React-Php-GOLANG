@@ -10,8 +10,9 @@ In the project directory, you can run:
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-Change the username and password in dbconnection.php file \
-Design the required Databases \ run the server
+Change the username and password in dbconnection.php file.\
+Design the required Databases.\
+run the server
 
 
 GO Lang Server:
