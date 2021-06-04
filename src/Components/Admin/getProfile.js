@@ -11,6 +11,7 @@ class GetProfile extends React.Component {
 			Address: "",
 			Phone: "",
 			Id: "",
+			Role: "admin",
 		};
 	}
 	componentDidMount() {
@@ -22,6 +23,7 @@ class GetProfile extends React.Component {
 				"http://localhost:12347/getAdminProfile",
 				{
 					Id: this.props.id,
+					Role: this.state.Role,
 				},
 				{ headers: headers }
 			)

@@ -13,40 +13,52 @@ import {
 } from "reactstrap";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Cookies from "js-cookie";
 class GetDocProfile extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			name: "",
-			email: "",
-			address: "",
-			phone: "",
+			Name: "",
+			Email: "",
+			Address: "",
+			Phone: "",
+			Role: "doctor",
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 	componentDidMount() {
+		const headers = {
+			authorization: Cookies.get("token"),
+		};
 		axios
-			.post("http://localhost:801/HMS/server/getDoctorProfile.php", {
-				doc_id: this.props.id,
-			})
+			.post(
+				"http://localhost:12347/getAdminProfile",
+				{
+					Id: this.props.id,
+					Role: this.state.Role,
+				},
+				{ headers: headers }
+			)
 			.then((res) => {
-				console.log(res.data);
+				console.log(res);
 				this.setState({
-					id: this.props.id,
-					name: res.data.user_data[0].doctor_name,
-					email: res.data.user_data[0].email,
-					address: res.data.user_data[0].address,
-					phone: res.data.user_data[0].phone,
+					Id: this.props.id,
+					Name: res.data.Name,
+					Email: res.data.Email,
+					Address: res.data.Address,
+					Phone: res.data.Phone,
 				});
 			});
 	}
 	handleSubmit(e) {
 		e.preventDefault();
+		const headers = {
+			authorization: Cookies.get("token"),
+		};
 		axios
-			.post(
-				"http://localhost:801/HMS/server/editDocProfile.php",
-				this.state
-			)
+			.post("http://localhost:12347/editAdminProfile", this.state, {
+				headers: headers,
+			})
 			.then((res) => {
 				console.log(res);
 			});
@@ -78,10 +90,10 @@ class GetDocProfile extends React.Component {
 									</Col>
 									<Col>
 										<Input
-											value={this.state.name}
+											value={this.state.Name}
 											onChange={(e) =>
 												this.setState({
-													name: e.target.value,
+													Name: e.target.value,
 												})
 											}
 										/>
@@ -95,10 +107,10 @@ class GetDocProfile extends React.Component {
 									</Col>
 									<Col>
 										<Input
-											value={this.state.email}
+											value={this.state.Email}
 											onChange={(e) =>
 												this.setState({
-													email: e.target.value,
+													Email: e.target.value,
 												})
 											}
 										/>
@@ -112,10 +124,10 @@ class GetDocProfile extends React.Component {
 									</Col>
 									<Col>
 										<Input
-											value={this.state.phone}
+											value={this.state.Phone}
 											onChange={(e) =>
 												this.setState({
-													phone: e.target.value,
+													Phone: e.target.value,
 												})
 											}
 										/>
@@ -129,10 +141,10 @@ class GetDocProfile extends React.Component {
 									</Col>
 									<Col>
 										<Input
-											value={this.state.address}
+											value={this.state.Address}
 											onChange={(e) =>
 												this.setState({
-													address: e.target.value,
+													Address: e.target.value,
 												})
 											}
 										/>

@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import {
@@ -18,26 +19,35 @@ class GetPatientProfile extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			id: "",
-			name: "",
-			email: "",
-			address: "",
-			phone: "",
+			Id: "",
+			Name: "",
+			Email: "",
+			Address: "",
+			Phone: "",
+			Role: "patient",
 		};
 	}
 	componentDidMount() {
+		const headers = {
+			authorization: Cookies.get("token"),
+		};
 		axios
-			.post("http://localhost:801/HMS/server/getPatientProfile.php", {
-				patient_id: this.props.patient_id,
-			})
+			.post(
+				"http://localhost:12347/getAdminProfile",
+				{
+					Id: this.props.patient_id,
+					Role: this.state.Role,
+				},
+				{ headers: headers }
+			)
 			.then((res) => {
 				console.log(res.data);
 				this.setState({
-					id: this.props.patient_id,
-					name: res.data.user_data[0].patient_name,
-					email: res.data.user_data[0].email,
-					address: res.data.user_data[0].address,
-					phone: res.data.user_data[0].phone,
+					Id: this.props.patient_id,
+					Name: res.data.Name,
+					Email: res.data.Email,
+					Address: res.data.Address,
+					Phone: res.data.Phone,
 				});
 			});
 	}
@@ -45,11 +55,13 @@ class GetPatientProfile extends Component {
 		e.preventDefault();
 		console.log(this.state.id);
 		// alert("Submitted");
+		const headers = {
+			authorization: Cookies.get("token"),
+		};
 		axios
-			.post(
-				"http://localhost:801/HMS/server/editPatientProfile.php",
-				this.state
-			)
+			.post("http://localhost:12347/editAdminProfile", this.state, {
+				headers: headers,
+			})
 			.then((res) => {
 				console.log(res);
 			});
@@ -96,10 +108,10 @@ class GetPatientProfile extends Component {
 									</Col>
 									<Col sm="10">
 										<Input
-											value={this.state.name}
+											value={this.state.Name}
 											onChange={(e) =>
 												this.setState({
-													name: e.target.value,
+													Name: e.target.value,
 												})
 											}
 										/>
@@ -113,10 +125,10 @@ class GetPatientProfile extends Component {
 									</Col>
 									<Col sm="10">
 										<Input
-											value={this.state.email}
+											value={this.state.Email}
 											onChange={(e) =>
 												this.setState({
-													email: e.target.value,
+													Email: e.target.value,
 												})
 											}
 										/>
@@ -130,10 +142,10 @@ class GetPatientProfile extends Component {
 									</Col>
 									<Col sm="10">
 										<Input
-											value={this.state.phone}
+											value={this.state.Phone}
 											onChange={(e) =>
 												this.setState({
-													phone: e.target.value,
+													Phone: e.target.value,
 												})
 											}
 										/>
@@ -147,10 +159,10 @@ class GetPatientProfile extends Component {
 									</Col>
 									<Col sm="10">
 										<Input
-											value={this.state.address}
+											value={this.state.Address}
 											onChange={(e) =>
 												this.setState({
-													address: e.target.value,
+													Address: e.target.value,
 												})
 											}
 										/>
