@@ -14,6 +14,7 @@ type doctor struct{
 	Phone string  
 	Department string 
 }
+
 var doc []doctor
 
 func GetDoctorEndPoint(w http.ResponseWriter, req *http.Request){
@@ -80,4 +81,49 @@ func AddDoctorEndPoint(w http.ResponseWriter, req *http.Request){
 		json.NewEncoder(w).Encode(reserr);
 		return 
 	}
+}
+func DocAppointmentEndPoint(w http.ResponseWriter, req *http.Request){
+	var app []appointment;
+	var k doctor
+	err:=json.NewDecoder(req.Body).Decode(&k);
+	fmt.Println(k);
+	if(err==nil){
+		rows,er:=db.Query("select name,description,day,contact,apid from appointment a,doctor d where a.id=d.doctor_id and d.doctor_id='"+k.Id+"'");
+		// fmt.Println("select  from appointment a,doctor d where a.id=d.doctor_id and d.doctor_id='"+k.Id+"'");
+		if(er==nil){
+			var temp appointment
+			for rows.Next(){
+				rows.Scan(&temp.Name,&temp.Description,&temp.Day,&temp.Contact,&temp.Apid);
+				app=append(app,temp);
+			}
+			
+		}
+		json.NewEncoder(w).Encode(app);
+	}else{
+		var reserr Error
+		reserr = SetError(reserr, "Failed To Fetch Appointments");
+		json.NewEncoder(w).Encode(reserr);
+		return 
+	}
+}
+func GetPrescription(w http.ResponseWriter, req *http.Request){
+	var temp appointment
+	err:=json.NewDecoder(req.Body).Decode(&temp);
+	if(err==nil){
+		rows,er:=db.Query("update appointment set prescription='"+temp.Prescription+"' where apid='"+temp.Apid+"'");
+		
+		if(er==nil){
+			_=rows;
+			fmt.Fprintf(w,"Success")
+			
+		}else{
+		fmt.Fprintf(w,"Failed");
+		}
+	}else{
+		var reserr Error
+		reserr = SetError(reserr, "Failed To Fetch Appointments");
+		json.NewEncoder(w).Encode(reserr);
+		return
+	}
+
 }

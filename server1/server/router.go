@@ -22,12 +22,16 @@ func MyRouter(){
 	router.HandleFunc("/getPatient",IsAuthorized(GetPatientEndPoint)).Methods("GET","OPTIONS")
 	router.HandleFunc("/deletePatient",IsAuthorized(DeletePatientEndPoint)).Methods("POST", "OPTIONS")
 	router.HandleFunc("/addPatient",IsAuthorized(AddPatientEndPoint)).Methods("POST");
+	router.HandleFunc("/bookAppointment",IsAuthorized(AddAppointment)).Methods("POST");
+	router.HandleFunc("/patientAppointment",IsAuthorized(PatientAppointment)).Methods("Post")
 	// Feedback End Point Handlers
 	router.HandleFunc("/getFeedback",IsAuthorized(GetFeedbackEndPoint)).Methods("GET")
 	// Doctor End Point Handlers
 	router.HandleFunc("/getDoctor",IsAuthorized(GetDoctorEndPoint)).Methods("GET")
 	router.HandleFunc("/deleteDoctor",DeleteDoctorEndPoint).Methods("POST","OPTIONS");
 	router.HandleFunc("/addDoctor",IsAuthorized(AddDoctorEndPoint)).Methods("POST");
+	router.HandleFunc("/docAppointment",IsAuthorized(DocAppointmentEndPoint)).Methods("POST");
+	router.HandleFunc("/addPrescription",IsAuthorized(GetPrescription)).Methods("Post");
 	//Login End Point Handler
 	router.HandleFunc("/login",LoginEndPoint).Methods("POST","OPTIONS");
 	//Department End Point Handler
