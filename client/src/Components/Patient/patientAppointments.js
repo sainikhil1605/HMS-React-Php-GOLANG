@@ -11,13 +11,20 @@ class PatientAppointments extends Component {
 		};
 	}
 	async componentDidMount() {
+		const headers = {
+			authorization: Cookies.get("token"),
+		};
 		await axios
-			.post("http://localhost:801/HMS/server/patientAppointments.php", {
-				email: Cookies.get("patientEmail"),
-			})
+			.post(
+				"http://localhost:12347/patientAppointment",
+				{
+					Email: Cookies.get("patientEmail"),
+				},
+				{ headers: headers }
+			)
 			.then((res) => {
-				console.log(res.data);
-				this.setState({ appointments: res.data.user_data });
+				console.log(res);
+				this.setState({ appointments: res.data });
 			});
 		console.log(this.state);
 	}
@@ -63,10 +70,10 @@ class PatientAppointments extends Component {
 						{this.state.appointments.map((appointment) => {
 							return (
 								<tr>
-									<td>{appointment.apid}</td>
-									<td>{appointment.name}</td>
-									<td>{appointment.email}</td>
-									<td>{appointment.prescription}</td>
+									<td>{appointment.Apid}</td>
+									<td>{appointment.Name}</td>
+									<td>{appointment.Email}</td>
+									<td>{appointment.Prescription}</td>
 								</tr>
 							);
 						})}

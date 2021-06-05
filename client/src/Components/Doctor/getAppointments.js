@@ -24,15 +24,21 @@ class GetAppointments extends React.Component {
 	}
 	componentDidMount() {
 		console.log(Cookies.get("doc_id"));
-
+		const headers = {
+			authorization: Cookies.get("token"),
+		};
 		axios
-			.post("http://localhost:801/HMS/server/get-appointments.php", {
-				doc_id: Cookies.get("doc_id"),
-			})
+			.post(
+				"http://localhost:12347/docAppointment",
+				{
+					Id: Cookies.get("doc_id"),
+				},
+				{ headers: headers }
+			)
 			.then((res) => {
 				console.log(res);
 				try {
-					this.setState({ appointments: res.data.user_data });
+					this.setState({ appointments: res.data });
 				} catch {
 					this.setState({ appointments: undefined });
 					console.log(this.state.appointments);
@@ -40,14 +46,21 @@ class GetAppointments extends React.Component {
 			});
 	}
 	handlePres(appointment) {
+		const headers = {
+			authorization: Cookies.get("token"),
+		};
 		this.setState({ isOpen: false });
 		console.log(this.state);
 		console.log(appointment);
 		axios
-			.post("http://localhost:801/HMS/server/add-prescription.php", {
-				apid: appointment.apid,
-				prescription: this.state.prescription,
-			})
+			.post(
+				"http://localhost:12347/addPrescription",
+				{
+					Apid: appointment.Apid,
+					Prescription: this.state.prescription,
+				},
+				{ headers: headers }
+			)
 			.then((res) => {
 				alert(res.data);
 			});
@@ -100,11 +113,9 @@ class GetAppointments extends React.Component {
 										if (this.state.searchTerm === "") {
 											return appointment;
 										} else if (
-											appointment.name
-												.toLowerCase()
-												.includes(
-													this.state.searchTerm.toLowerCase()
-												)
+											appointment.Name.toLowerCase().includes(
+												this.state.searchTerm.toLowerCase()
+											)
 										) {
 											return appointment;
 										}
@@ -112,12 +123,12 @@ class GetAppointments extends React.Component {
 									.map((appointment) => {
 										return (
 											<tr>
-												<td>{appointment.name}</td>
+												<td>{appointment.Name}</td>
 												<td>
-													{appointment.description}
+													{appointment.Description}
 												</td>
-												<td>{appointment.day}</td>
-												<td>{appointment.contact}</td>
+												<td>{appointment.Day}</td>
+												<td>{appointment.Contact}</td>
 												{this.state.isOpen ? (
 													<td></td>
 												) : (

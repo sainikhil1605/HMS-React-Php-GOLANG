@@ -14,28 +14,31 @@ import {
 	Col,
 	InputGroupButtonDropdown,
 } from "reactstrap";
+import Cookies from "js-cookie";
 class BookAppointment extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			name: "",
-			email: "",
-			contact: "",
-			age: "",
-			day: "",
-			speciality: "",
-			description: "",
-			id: "",
+			Name: "",
+			Email: "",
+			Contact: "",
+			Age: "",
+			Day: "",
+			Speciality: "",
+			Description: "",
+			Id: "",
 		};
 		this.inputRef = React.createRef();
 	}
 	handleSubmit(e) {
 		console.log(this.state);
+		const headers = {
+			authorization: Cookies.get("token"),
+		};
 		axios
-			.post(
-				"http://localhost:801/HMS/server/bookAppointment.php",
-				this.state
-			)
+			.post("http://localhost:12347/bookAppointment", this.state, {
+				headers: headers,
+			})
 			.then((res) => {
 				console.log(res);
 				alert(res.data);
@@ -80,7 +83,7 @@ class BookAppointment extends React.Component {
 					<Col md="6">
 						<Form className="mt-3">
 							<FormGroup>
-								<Label>Name</Label>
+								<Label>Name *</Label>
 								<Input
 									innerRef={this.inputRef}
 									type="text"
@@ -88,7 +91,7 @@ class BookAppointment extends React.Component {
 										"patientName"
 									)}
 									onChange={(e) => {
-										this.setState({ name: e.target.value });
+										this.setState({ Name: e.target.value });
 									}}
 								/>
 							</FormGroup>
@@ -101,7 +104,7 @@ class BookAppointment extends React.Component {
 									)}
 									onChange={(e) => {
 										this.setState({
-											email: e.target.value,
+											Email: e.target.value,
 										});
 									}}
 								/>
@@ -115,17 +118,17 @@ class BookAppointment extends React.Component {
 									)}
 									onChange={(e) => {
 										this.setState({
-											contact: e.target.value,
+											Contact: e.target.value,
 										});
 									}}
 								/>
 							</FormGroup>
 							<FormGroup>
-								<Label>Age</Label>
+								<Label>Age *</Label>
 								<Input
 									type="number"
 									onChange={(e) => {
-										this.setState({ age: e.target.value });
+										this.setState({ Age: e.target.value });
 									}}
 								/>
 							</FormGroup>
@@ -134,7 +137,7 @@ class BookAppointment extends React.Component {
 								<Input
 									type="date"
 									onChange={(e) => {
-										this.setState({ day: e.target.value });
+										this.setState({ Day: e.target.value });
 									}}
 								/>
 							</FormGroup>
@@ -144,7 +147,7 @@ class BookAppointment extends React.Component {
 									type="text"
 									onChange={(e) => {
 										this.setState({
-											speciality: e.target.value,
+											Speciality: e.target.value,
 										});
 									}}
 								/>
@@ -155,17 +158,17 @@ class BookAppointment extends React.Component {
 									type="text"
 									onChange={(e) => {
 										this.setState({
-											description: e.target.value,
+											Description: e.target.value,
 										});
 									}}
 								/>
 							</FormGroup>
 							<FormGroup>
-								<Label>Doctor Id</Label>
+								<Label>Doctor Id *</Label>
 								<Input
 									type="number"
 									onChange={(e) => {
-										this.setState({ id: e.target.value });
+										this.setState({ Id: e.target.value });
 									}}
 								/>
 							</FormGroup>
