@@ -34,11 +34,17 @@ class GetDepartment extends React.Component {
 	}
 	handleDelete(id) {
 		console.log(id);
-
+		const headers = {
+			authorization: Cookies.get("token"),
+		};
 		axios
-			.post("http://localhost:801/HMS/server/delete-department.php", {
-				dept_id: id,
-			})
+			.post(
+				"http://localhost:12347/deleteDepartment",
+				{
+					DeptId: id,
+				},
+				{ headers: headers }
+			)
 			.then((res) => {
 				alert("Department deleted");
 				window.location.reload(false);
